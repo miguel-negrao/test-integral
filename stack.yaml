@@ -1,0 +1,6 @@
+resolver: lts-18.21
+packages:
+  - .
+extra-deps:
+- bearriver-0.13.3@sha256:b90e13bbdebafb9d72ddfc01da223c281aeb5d27f3e78926a4ecd423a7d41107,1794
+pvp-bounds: both
