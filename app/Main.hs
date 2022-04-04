@@ -20,6 +20,7 @@ import Data.Functor.Identity
 import Data.MonadicStreamFunction
 import FRP.BearRiver
 import Text.Printf
+import GHC.Float
 
 main :: IO ()
 main = forM_ [100, 1000, 10000] printErrorFull
@@ -48,6 +49,7 @@ printErrorFull numPoints = do
       ("f(x) = x", id, \x -> (x ** 2) / 2, 10),
       ("f(x) = x**2", (** 2), \x -> (x ** 3) / 3, 10),
       ("f(x) = x**3", (** 3), \x -> (x ** 4) / 4, 10),
+      ("f(x) = x**6", (** 6), \x -> (x ** 7) / 7, 10),
       ("f(x) = -x**3+10 x**2+4 x+1",
         \x -> - (x ** 3) + 10 * (x ** 2) + 4 * x, 
         \x -> - (x ** 4) / 4 + 10 * (x ** 3) / 3 + 2 * (x ** 2), 15),
@@ -68,12 +70,12 @@ integralTrapFrom a0 =
     accumulateWith (^+^) a0 -< (realToFrac dt / 2) *^ (a ^+^ aPrev)
 
 printErrorHeader :: IO ()
-printErrorHeader = printf "%30s: %10s %10s %10s %10s\n" ("Description" :: String) ("Trap bttr" :: String) ("MSE Rect" :: String) ("MSE Trap" :: String) ("ratio" :: String)
+printErrorHeader = printf "%30s: %10s dur %10s %10s %10s\n" ("Description" :: String) ("Trap bttr" :: String) ("MSE Rect" :: String) ("MSE Trap" :: String) ("ratio" :: String)
 
 printError :: Int -> (String, Time -> Double, Time -> Double, Time) -> IO ()
 printError numPoints (name, f, integralF, duration) = putStrLn string
   where
-    string = printf "%30s: %10s %10.3e %10.3e %10.3e" name (show rectVsTrap) errorRect errorTrap (errorRect / errorTrap)
+    string = printf "%30s: %10s %3.f %10.3e %10.3e %10.3e" name (show rectVsTrap) duration errorRect errorTrap (errorRect / errorTrap)
     meanSquaredError cell = sum (runIdentity $ embed (runReaderS $ errorCell f integralF cell) values) / fromIntegral size
     errorRect = meanSquaredError integral
     errorTrap = meanSquaredError integralTrap
