@@ -23,7 +23,7 @@ import Text.Printf
 import GHC.Float
 
 main :: IO ()
-main = forM_ [100, 1000, 10000] printErrorFull
+main = forM_ [20, 100, 1000, 10000] printErrorFull
 
 {--
 plots:
@@ -50,7 +50,7 @@ printErrorFull numPoints = do
       ("f(x) = x**2", (** 2), \x -> (x ** 3) / 3, 10),
       ("f(x) = x**3", (** 3), \x -> (x ** 4) / 4, 10),
       ("f(x) = x**6", (** 6), \x -> (x ** 7) / 7, 10),
-      ("f(x) = -x**3+10 x**2+4 x+1",
+      ("f(x) = -x**3+10 x**2+4 x",
         \x -> - (x ** 3) + 10 * (x ** 2) + 4 * x, 
         \x -> - (x ** 4) / 4 + 10 * (x ** 3) / 3 + 2 * (x ** 2), 15),
       ("f(x) = sin(x)", sin, \x -> 1 - cos x, 4 * pi),
